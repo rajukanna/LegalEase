@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.backend
+    container_name: legalease-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - LLM_PROVIDER=${LLM_PROVIDER:-gemini}
+      - JWT_SECRET=${JWT_SECRET:-dev_jwt_secret_change_in_production_32_bytes}
+      - VECTOR_DB_URL=${VECTOR_DB_URL:-local_chroma_db}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./data/legalease.db}
+      - GCS_BUCKET=${GCS_BUCKET:-}
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:80
+    volumes:
+      - ../backend/data:/app/backend/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.frontend
+    container_name: legalease-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: legalease-network
