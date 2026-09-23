@@ -63,16 +63,12 @@ describe('RiskFlagPanel Component', () => {
 });
 
 describe('UploadZone Component', () => {
-  it('renders upload instructions and quick sample demo buttons', () => {
+  it('renders upload instructions and dropzone without hardcoded demo contracts', () => {
     const onUpload = vi.fn();
-    const onSample = vi.fn();
-    render(<UploadZone onUploadSuccess={onUpload} onSelectSample={onSample} />);
+    render(<UploadZone onUploadSuccess={onUpload} />);
 
     expect(screen.getByText(/Upload Any Legal Agreement or Policy/i)).toBeInTheDocument();
-    expect(screen.getByText(/Residential Lease/i)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText(/Residential Lease/i));
-    expect(onSample).toHaveBeenCalledWith('doc-sample-lease');
+    expect(screen.queryByText(/Residential Lease/i)).not.toBeInTheDocument();
   });
 });
 
@@ -180,4 +176,123 @@ describe('Navbar Auth Integration', () => {
     expect(screen.getByText('Alex Morgan')).toBeInTheDocument();
   });
 });
+
+import { LoginPage } from '../components/auth/LoginPage';
+import { SidebarNav } from '../components/common/SidebarNav';
+import { TopHeader } from '../components/common/TopHeader';
+import { ModernDashboard } from '../components/dashboard/ModernDashboard';
+
+describe('LoginPage Component', () => {
+  it('renders login start page with greeting, tab switcher, and demo fill', () => {
+    const onLoginSuccess = vi.fn();
+    const onGuest = vi.fn();
+    render(<LoginPage onLoginSuccess={onLoginSuccess} onContinueAsGuest={onGuest} />);
+
+    expect(screen.getByText(/Welcome back 👋/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Fill Demo' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Explore as Guest/i })).toBeInTheDocument();
+  });
+
+  it('populates demo credentials when clicking Fill Demo on LoginPage', () => {
+    const onLoginSuccess = vi.fn();
+    const onGuest = vi.fn();
+    render(<LoginPage onLoginSuccess={onLoginSuccess} onContinueAsGuest={onGuest} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Fill Demo' }));
+    const emailInput = screen.getByLabelText(/Email Address/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^Password$/i) as HTMLInputElement;
+
+    expect(emailInput.value).toBe('demo@legalease.com');
+    expect(passwordInput.value).toBe('demo1234');
+  });
+
+  it('triggers onContinueAsGuest callback when clicked', () => {
+    const onLoginSuccess = vi.fn();
+    const onGuest = vi.fn();
+    render(<LoginPage onLoginSuccess={onLoginSuccess} onContinueAsGuest={onGuest} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Explore as Guest/i }));
+    expect(onGuest).toHaveBeenCalled();
+  });
+});
+
+describe('SidebarNav Component', () => {
+  it('renders navigation tabs and triggers tab change', () => {
+    const setActiveTab = vi.fn();
+    const onOpenUpload = vi.fn();
+    const setIsDarkMode = vi.fn();
+    const onOpenTour = vi.fn();
+
+    render(
+      <SidebarNav
+        activeTab="dashboard"
+        setActiveTab={setActiveTab}
+        onOpenUpload={onOpenUpload}
+        isDarkMode={false}
+        setIsDarkMode={setIsDarkMode}
+        onOpenTour={onOpenTour}
+      />
+    );
+
+    const compareBtn = screen.getByTitle('Compare Agreement Versions');
+    fireEvent.click(compareBtn);
+    expect(setActiveTab).toHaveBeenCalledWith('compare');
+
+    const uploadBtn = screen.getByTitle('Upload Document');
+    fireEvent.click(uploadBtn);
+    expect(onOpenUpload).toHaveBeenCalled();
+  });
+});
+
+describe('TopHeader Component', () => {
+  it('renders welcome title, search input, and user profile', () => {
+    const onSearchChange = vi.fn();
+    const onLogout = vi.fn();
+    const user = {
+      id: 'usr-1',
+      email: 'jordan@example.com',
+      full_name: 'Jordan Lee',
+      is_active: true,
+    };
+
+    render(
+      <TopHeader
+        currentUser={user}
+        searchQuery=""
+        onSearchChange={onSearchChange}
+        onLogout={onLogout}
+      />
+    );
+
+    expect(screen.getByText(/Welcome back 👋/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Search documents or clauses/i)).toBeInTheDocument();
+    expect(screen.getByText('JL')).toBeInTheDocument();
+    expect(screen.getByText('Jordan Lee')).toBeInTheDocument();
+  });
+});
+
+describe('ModernDashboard Component', () => {
+  it('renders pastel activity cards, metrics, and calendar schedule', () => {
+    const onSelect = vi.fn();
+    const onUpload = vi.fn();
+    const onNav = vi.fn();
+    const onUploadFile = vi.fn();
+
+    render(
+      <ModernDashboard
+        documents={[]}
+        onSelectDocument={onSelect}
+        onOpenUpload={onUpload}
+        onNavigateTab={onNav}
+        onUploadFile={onUploadFile}
+      />
+    );
+
+    expect(screen.getByText('Document Workspace')).toBeInTheDocument();
+    expect(screen.getByText('Compare Versions')).toBeInTheDocument();
+    expect(screen.getByText('Review schedule')).toBeInTheDocument();
+    expect(screen.getByText(/Notice & Cure Periods/i)).toBeInTheDocument();
+  });
+});
+
 
