@@ -6,7 +6,10 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4+-646CFF.svg?logo=vite&logoColor=white)](https://vitejs.dev)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-Flash_3.8_/_3.6-4285F4.svg?logo=google&logoColor=white)](https://ai.google.dev)
 [![WCAG AA](https://img.shields.io/badge/Accessibility-WCAG_2.1_AA-success.svg)](https://www.w3.org/WAI/standards-guidelines/wcag/)
+[![Google Cloud Run](https://img.shields.io/badge/Google_Cloud_Run-Live_Demo-4285F4.svg?logo=googlecloud&logoColor=white)](https://legalease-804290525562.asia-south1.run.app/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+> 🚀 **Live Demo on Google Cloud Run**: [https://legalease-804290525562.asia-south1.run.app](https://legalease-804290525562.asia-south1.run.app)
 
 An autonomous GenAI-powered legal accessibility platform built to democratize contract comprehension. **LegalEase** empowers everyday individuals, tenants, employees, and small business owners to parse, understand, compare, and navigate dense legal documents without getting lost in predatory legalese or spending thousands on preliminary legal consultations.
 

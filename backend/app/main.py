@@ -49,7 +49,14 @@ async def add_security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    response.headers["Content-Security-Policy"] = "default-src 'self'; frame-ancestors 'none';"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com data:; "
+        "img-src 'self' data: https:; "
+        "frame-ancestors 'none';"
+    )
     return response
 
 
@@ -79,3 +86,33 @@ async def health_check():
         "version": settings.VERSION,
         "llm_provider": settings.LLM_PROVIDER
     }
+
+
+# Static Frontend Hosting (Single-Container Cloud Run Deployment)
+import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+_frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist"))
+if not os.path.exists(_frontend_dist):
+    _alt = "/app/frontend/dist"
+    if os.path.exists(_alt):
+        _frontend_dist = _alt
+
+if os.path.exists(_frontend_dist):
+    _assets = os.path.join(_frontend_dist, "assets")
+    if os.path.exists(_assets):
+        app.mount("/assets", StaticFiles(directory=_assets), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa(full_path: str):
+        if full_path.startswith("api/") or full_path.startswith("docs") or full_path in ("openapi.json", "health"):
+            return JSONResponse({"detail": "Not found"}, status_code=404)
+        target = os.path.join(_frontend_dist, full_path)
+        if os.path.isfile(target):
+            return FileResponse(target)
+        index_file = os.path.join(_frontend_dist, "index.html")
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+        return JSONResponse({"detail": "Frontend not found"}, status_code=404)
+
