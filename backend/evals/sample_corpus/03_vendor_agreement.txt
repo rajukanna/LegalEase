@@ -1,0 +1,13 @@
+MASTER SERVICES VENDOR AGREEMENT
+
+1. SERVICES AND DELIVERABLES
+Vendor shall provide cloud infrastructure support according to Statements of Work executed by the parties.
+
+2. PAYMENT TERMS
+Invoices are payable Net 30 days. Late balances shall accrue interest at 1.5% per month.
+
+3. INDEMNIFICATION
+Vendor shall defend, indemnify, and hold Client harmless against third-party patent or copyright infringement claims arising from deliverables.
+
+4. LIMITATION OF LIABILITY
+Neither party's aggregate liability under this agreement shall exceed the total fees paid by Client during the preceding twelve (12) month period.

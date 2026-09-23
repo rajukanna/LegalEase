@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 37 99 235;
+    --color-primary-dark: 29 78 216;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Accessibility: Visible high-contrast focus rings for all interactive elements */
+  :focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+  }
+
+  /* Accessibility: WCAG AA prefers-reduced-motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Custom clause highlight classes */
+.clause-highlight {
+  background-color: #fef08a; /* Yellow-200 */
+  border-left: 4px solid #ca8a04;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.clause-highlight.active {
+  background-color: #fed7aa; /* Orange-200 */
+  border-left-color: #ea580c;
+  box-shadow: 0 0 0 2px #f97316;
+}
+
+.clause-highlight-high-risk {
+  background-color: #fee2e2;
+  border-left: 4px solid #dc2626;
+}
+
+.clause-highlight-caution {
+  background-color: #fef3c7;
+  border-left: 4px solid #d97706;
+}

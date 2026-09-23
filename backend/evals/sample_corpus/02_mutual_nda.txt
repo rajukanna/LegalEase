@@ -1,0 +1,13 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+1. SCOPE AND DEFINITION
+The parties desire to evaluate a potential business partnership. "Confidential Information" encompasses any technical designs, product roadmaps, or financial metrics disclosed and labeled as proprietary.
+
+2. DUTY OF CONFIDENTIALITY
+Each party agrees to hold all disclosed materials in confidence for a period of two (2) years from disclosure date, applying reasonable care.
+
+3. EXCLUSIONS
+Confidentiality does not extend to information that is publicly accessible, independently developed, or obtained from a third party without breach.
+
+4. ARBITRATION AND GOVERNING LAW
+Any controversy arising from this NDA shall be submitted to confidential binding arbitration under the laws of the State of Delaware.
