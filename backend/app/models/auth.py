@@ -1,7 +1,16 @@
 """Authentication and user session Pydantic models."""
 
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+
+try:
+    import email_validator  # noqa: F401
+    from pydantic import EmailStr
+except ImportError:
+    from typing import Annotated
+    from pydantic import StringConstraints
+    EmailStr = Annotated[str, StringConstraints(pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
+
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class UserBase(BaseModel):
