@@ -1,8 +1,6 @@
-"""Application configuration using Pydantic Settings."""
-
-from typing import List
+from typing import List, Union
 from pydantic_settings import BaseSettings
-from pydantic import Field
+from pydantic import Field, field_validator
 
 
 class Settings(BaseSettings):
@@ -18,20 +16,29 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = Field(default="")
     ANTHROPIC_API_KEY: str = Field(default="")
     OPENAI_API_KEY: str = Field(default="")
-    LLM_PROVIDER: str = Field(default="mock")  # 'gemini', 'anthropic', 'mock'
+    LLM_PROVIDER: str = Field(default="gemini")  # 'gemini', 'anthropic', 'mock'
     LLM_TIMEOUT_SECONDS: int = 30
-    LLM_MAX_TOKENS: int = 2048
+    LLM_MAX_TOKENS: int = 8192
 
     # Authentication & Security
     JWT_SECRET: str = Field(default="dev_secret_key_change_in_production_32bytes")
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
-    ALLOWED_ORIGINS: List[str] = [
+    ALLOWED_ORIGINS: Union[List[str], str] = [
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
     ]
+
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    def parse_allowed_origins(cls, v):
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                return json.loads(v)
+            return [x.strip() for x in v.split(",") if x.strip()]
+        return v
 
     # File uploads & validation
     MAX_UPLOAD_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB

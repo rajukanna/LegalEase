@@ -26,21 +26,14 @@ class BaseLLMClient(ABC):
 
 
 class GeminiLLMClient(BaseLLMClient):
-    """Google Gemini LLM client implementation."""
+    """Google Gemini LLM client implementation using official google-genai SDK."""
 
     def __init__(self, api_key: str):
         self.api_key = api_key
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=api_key)
-            self.model = genai.GenerativeModel(
-                model_name="gemini-1.5-flash",
-                generation_config={
-                    "temperature": 0.1,
-                    "max_output_tokens": settings.LLM_MAX_TOKENS,
-                    "response_mime_type": "application/json",
-                }
-            )
+            from google import genai
+            self.client = genai.Client(api_key=api_key)
+            self.candidate_models = ["gemini-flash-latest", "gemini-3.6-flash", "gemini-3.7-flash"]
             self._client_ready = True
         except Exception as e:
             logger.warning(f"Failed to initialize live Gemini client: {e}. Falling back to mock.")
@@ -51,22 +44,49 @@ class GeminiLLMClient(BaseLLMClient):
             mock = MockLLMClient()
             return await mock.generate_json(system_prompt, user_prompt)
 
-        try:
-            prompt = f"{system_prompt}\n\n{user_prompt}"
-            response = self.model.generate_content(prompt)
-            text = response.text.strip()
-            # Clean markdown codeblocks if returned
-            if text.startswith("```json"):
-                text = text[7:]
-            if text.startswith("```"):
-                text = text[3:]
-            if text.endswith("```"):
-                text = text[:-3]
-            return json.loads(text.strip())
-        except Exception as e:
-            logger.error(f"Gemini generation error: {e}. Utilizing fallback response.")
-            mock = MockLLMClient()
-            return await mock.generate_json(system_prompt, user_prompt)
+        last_error = None
+        for model in self.candidate_models:
+            try:
+                from google.genai import types
+                prompt = f"{system_prompt}\n\n{user_prompt}"
+                config = types.GenerateContentConfig(
+                    temperature=0.1,
+                    max_output_tokens=settings.LLM_MAX_TOKENS,
+                    response_mime_type="application/json",
+                )
+                response = self.client.models.generate_content(
+                    model=model,
+                    contents=prompt,
+                    config=config,
+                )
+                text = response.text.strip()
+                # Clean markdown codeblocks if returned
+                if text.startswith("```json"):
+                    text = text[7:]
+                elif text.startswith("```"):
+                    text = text[3:]
+                if text.endswith("```"):
+                    text = text[:-3]
+                text = text.strip()
+                try:
+                    return json.loads(text)
+                except json.JSONDecodeError:
+                    start_obj = text.find("{")
+                    start_arr = text.find("[")
+                    start = min(s for s in (start_obj, start_arr) if s != -1) if (start_obj != -1 or start_arr != -1) else -1
+                    end_obj = text.rfind("}")
+                    end_arr = text.rfind("]")
+                    end = max(end_obj, end_arr)
+                    if start != -1 and end != -1 and end > start:
+                        return json.loads(text[start:end+1])
+                    raise
+            except Exception as e:
+                last_error = e
+                logger.warning(f"Gemini model {model} failed: {e}. Trying next candidate...")
+
+        logger.error(f"All Gemini models failed (last error: {last_error}). Utilizing fallback response.")
+        mock = MockLLMClient()
+        return await mock.generate_json(system_prompt, user_prompt)
 
     async def stream_text(self, system_prompt: str, user_prompt: str) -> AsyncGenerator[str, None]:
         if not self._client_ready:
@@ -75,15 +95,32 @@ class GeminiLLMClient(BaseLLMClient):
                 yield token
             return
 
-        try:
-            prompt = f"{system_prompt}\n\n{user_prompt}"
-            response = self.model.generate_content(prompt, stream=True)
-            for chunk in response:
-                if chunk.text:
-                    yield chunk.text
-        except Exception as e:
-            logger.error(f"Gemini streaming error: {e}")
-            yield f"Error generating stream: {e}"
+        for model in self.candidate_models:
+            try:
+                from google.genai import types
+                prompt = f"{system_prompt}\n\n{user_prompt}"
+                config = types.GenerateContentConfig(
+                    temperature=0.1,
+                    max_output_tokens=settings.LLM_MAX_TOKENS,
+                )
+                response = self.client.models.generate_content_stream(
+                    model=model,
+                    contents=prompt,
+                    config=config,
+                )
+                has_yielded = False
+                for chunk in response:
+                    if chunk.text:
+                        has_yielded = True
+                        yield chunk.text
+                if has_yielded:
+                    return
+            except Exception as e:
+                logger.warning(f"Gemini streaming model {model} failed: {e}")
+
+        mock = MockLLMClient()
+        async for token in mock.stream_text(system_prompt, user_prompt):
+            yield token
 
 
 class MockLLMClient(BaseLLMClient):

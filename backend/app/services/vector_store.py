@@ -124,7 +124,8 @@ class InMemoryVectorStore:
         citations = []
         for score, chunk in top_matches:
             if score >= self.GROUNDING_THRESHOLD:
-                snippet = chunk.text[:180].replace("\n", " ").strip() + "..."
+                cleaned_text = chunk.text.replace("\n", " ").strip()
+                snippet = cleaned_text if len(cleaned_text) <= 1000 else cleaned_text[:1000] + "..."
                 citations.append(ChatCitation(
                     clause_title=chunk.clause_title,
                     section_reference=chunk.clause_title,
