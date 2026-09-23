@@ -4,17 +4,18 @@
 
 @layer base {
   :root {
-    --color-primary: 37 99 235;
-    --color-primary-dark: 29 78 216;
+    --color-primary: 15 23 42; /* Slate-900 */
+    --color-primary-dark: 2 6 23;
   }
 
   html {
     scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Accessibility: Visible high-contrast focus rings for all interactive elements */
+  /* Accessibility: Visible high-contrast focus rings */
   :focus-visible {
-    outline: 2px solid #2563eb;
+    outline: 2px solid #0f172a;
     outline-offset: 2px;
   }
 
@@ -29,29 +30,46 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* Sleek minimal scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
 }
 
-/* Custom clause highlight classes */
+/* Custom clause highlight classes - light minimal styling */
 .clause-highlight {
-  background-color: #fef08a; /* Yellow-200 */
-  border-left: 4px solid #ca8a04;
+  background-color: #fef9c3; /* Subtle light yellow */
+  border-left: 3px solid #eab308;
   padding: 4px 8px;
   border-radius: 4px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .clause-highlight.active {
-  background-color: #fed7aa; /* Orange-200 */
-  border-left-color: #ea580c;
-  box-shadow: 0 0 0 2px #f97316;
+  background-color: #fef08a;
+  border-left-color: #ca8a04;
+  box-shadow: 0 0 0 1px #eab308;
 }
 
 .clause-highlight-high-risk {
-  background-color: #fee2e2;
-  border-left: 4px solid #dc2626;
+  background-color: #fff1f2;
+  border-left: 3px solid #f43f5e;
 }
 
 .clause-highlight-caution {
-  background-color: #fef3c7;
-  border-left: 4px solid #d97706;
+  background-color: #fffbeb;
+  border-left: 3px solid #f59e0b;
 }
+

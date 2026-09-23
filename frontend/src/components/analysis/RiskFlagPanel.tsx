@@ -18,17 +18,17 @@ export const RiskFlagPanel: React.FC<RiskFlagPanelProps> = ({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400">
-            <AlertTriangle className="h-4 w-4" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+            <AlertTriangle className="h-3.5 w-3.5 text-rose-500" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            <h3 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white">
               Identified Contract Risks
             </h3>
-            <p className="text-[11px] text-slate-500">Click any card to jump to the source clause</p>
+            <p className="text-[10px] text-slate-400">Click any card to jump to the source clause</p>
           </div>
         </div>
-        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 border border-slate-200/60 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
           {flags.length} Flags Detected
         </span>
       </div>
@@ -50,16 +50,16 @@ export const RiskFlagPanel: React.FC<RiskFlagPanelProps> = ({
                   onSelectFlag(flag);
                 }
               }}
-              className={`rounded-2xl border p-4 sm:p-5 transition-all text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`rounded-2xl border p-4 sm:p-5 transition-all text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
                 isSelected
-                  ? 'border-blue-500 bg-blue-50/50 shadow-md ring-1 ring-blue-500/30 dark:border-blue-500 dark:bg-blue-950/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700'
+                  ? 'border-slate-900 bg-white shadow-xs ring-1 ring-slate-900/20 dark:border-white dark:bg-slate-900 dark:ring-white/20'
+                  : 'border-slate-200/80 bg-white hover:border-slate-300 hover:shadow-2xs dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700'
               }`}
             >
               {/* Header with Multi-Modal Badge & Clause Ref */}
               <div className="flex items-center justify-between gap-2 mb-2">
                 <RiskBadge level={flag.severity} />
-                <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-0.5 text-[11px] font-mono font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-mono font-medium text-slate-600 border border-slate-200/60 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
                   <span>{flag.clause_reference}</span>
                   <ExternalLink className="h-3 w-3 text-slate-400" />
                 </span>

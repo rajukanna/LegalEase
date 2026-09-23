@@ -1,4 +1,4 @@
-# LegalEase — 3-Minute Demo Script for Hackathon Evaluators
+# LegalEase — 3-Minute Interactive Product Walkthrough Guide
 
 ## Problem Statement
 Every day, millions of people sign leases, employment agreements, SaaS terms, and NDAs without reading or understanding what rights they are signing away. Legal jargon is intentionally dense, hiring an attorney for everyday document review costs $350–$600/hr, and generic AI tools frequently hallucinate non-existent clauses or provide unauthorized legal advice.

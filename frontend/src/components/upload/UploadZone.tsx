@@ -67,30 +67,30 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
 
   return (
     <div className="mx-auto max-w-4xl p-4 sm:p-6">
-      {/* Quick Demo Pre-seed Banner */}
-      <div className="mb-6 rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-5 shadow-sm dark:border-blue-900/60 dark:from-blue-950/40 dark:to-indigo-950/40">
+      {/* Sample Agreements Banner */}
+      <div className="mb-6 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <span className="inline-block rounded bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-              ⚡ Zero-Setup Hackathon Demo
+            <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 border border-slate-200/60 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
+              ⚡ Sample Documents
             </span>
             <h2 className="mt-1 text-base font-bold text-slate-900 dark:text-white">
               Try LegalEase Instantly with Pre-Loaded Contracts
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
               Select a sample document below to test automatic classification, Grade-8 summarization, and risk flagging:
             </p>
           </div>
           <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <button
               onClick={() => onSelectSample('doc-sample-lease')}
-              className="flex-1 sm:flex-none rounded-lg bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white shadow hover:bg-blue-700 transition focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="flex-1 sm:flex-none rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-medium text-white shadow-2xs hover:bg-slate-800 transition dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-slate-900"
             >
               Residential Lease
             </button>
             <button
               onClick={() => onSelectSample('doc-sample-nda-1')}
-              className="flex-1 sm:flex-none rounded-lg bg-slate-800 px-3.5 py-2 text-xs font-semibold text-white shadow hover:bg-slate-700 transition dark:bg-slate-700 dark:hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="flex-1 sm:flex-none rounded-xl bg-white px-3.5 py-2 text-xs font-medium text-slate-700 border border-slate-200/80 shadow-2xs hover:bg-slate-50 transition dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-slate-400"
             >
               Mutual NDA
             </button>
@@ -114,8 +114,8 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
         }}
         className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 sm:p-12 text-center transition-all ${
           isDragging
-            ? 'border-blue-500 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/20'
-            : 'border-slate-300 bg-white hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-600'
+            ? 'border-slate-500 bg-slate-100/50 dark:border-slate-400 dark:bg-slate-800/40'
+            : 'border-slate-300/80 bg-white hover:border-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700'
         }`}
       >
         <input
@@ -132,11 +132,11 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
           id="legal-doc-upload"
         />
 
-        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm dark:bg-blue-950 dark:text-blue-400">
-          <UploadCloud className="h-8 w-8" aria-hidden="true" />
+        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 shadow-2xs dark:bg-slate-800 dark:text-slate-200">
+          <UploadCloud className="h-7 w-7" aria-hidden="true" />
         </div>
 
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+        <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
           Upload Any Legal Agreement or Policy
         </h3>
         <p className="mt-1 max-w-md text-xs sm:text-sm text-slate-500 dark:text-slate-400">
@@ -148,13 +148,13 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-700 transition focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-50"
+            className="rounded-xl bg-slate-900 px-5 py-2.5 text-xs sm:text-sm font-medium text-white shadow-2xs hover:bg-slate-800 transition focus-visible:ring-2 focus-visible:ring-slate-900 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
           >
             Browse Files
           </button>
         </div>
 
-        <div className="mt-4 flex items-center gap-4 text-xs text-slate-400">
+        <div className="mt-4 flex items-center gap-3 text-[11px] text-slate-400">
           <span>Supported: PDF, DOCX, TXT, PNG</span>
           <span>•</span>
           <span>Max: 10 MB</span>
@@ -165,13 +165,13 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
         {/* Upload Progress Bar */}
         {isUploading && (
           <div className="mt-6 w-full max-w-md" role="status" aria-live="polite">
-            <div className="flex justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <div className="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
               <span>Extracting & Chunking Clauses...</span>
               <span>{uploadProgress}%</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
               <div
-                className="h-full bg-blue-600 transition-all duration-300"
+                className="h-full bg-slate-900 dark:bg-white transition-all duration-300"
                 style={{ width: `${uploadProgress}%` }}
               />
             </div>
@@ -182,9 +182,9 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
         {errorMsg && (
           <div
             role="alert"
-            className="mt-6 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800 dark:border-red-900 dark:bg-red-950/60 dark:text-red-300 max-w-md"
+            className="mt-6 flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-800 dark:border-rose-900 dark:bg-rose-950/60 dark:text-rose-300 max-w-md"
           >
-            <AlertTriangle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
+            <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600 dark:text-rose-400" />
             <p className="text-left">{errorMsg}</p>
           </div>
         )}
@@ -196,11 +196,11 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
           role="dialog"
           aria-modal="true"
           aria-labelledby="pii-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4"
         >
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-900 dark:border dark:border-slate-800">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-slate-200/80 dark:bg-slate-900 dark:border-slate-800">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200">
                 <Shield className="h-5 w-5" />
               </div>
               <div>
@@ -215,7 +215,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
               <p>
                 Your document ({pendingFile?.name}) will be parsed to extract clauses and generate plain-language explanations.
               </p>
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300">
+              <div className="rounded-xl border border-amber-200/80 bg-amber-50/70 p-3 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300">
                 <div className="flex items-start gap-2">
                   <Lock className="h-4 w-4 shrink-0 text-amber-700 mt-0.5" />
                   <p>
@@ -231,7 +231,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
                 id="pii-redact-checkbox"
                 checked={redactPii}
                 onChange={(e) => setRedactPii(e.target.checked)}
-                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                className="rounded border-slate-300 text-slate-900 focus:ring-slate-900 h-4 w-4"
               />
               <label htmlFor="pii-redact-checkbox" className="text-xs text-slate-700 dark:text-slate-300 font-medium cursor-pointer">
                 Enable automatic PII masking (Recommended)
@@ -242,14 +242,14 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onSelec
               <button
                 type="button"
                 onClick={() => setShowPiiModal(false)}
-                className="rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                className="rounded-xl px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={processUpload}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-blue-700 transition"
+                className="rounded-xl bg-slate-900 px-4 py-2 text-xs font-medium text-white shadow-2xs hover:bg-slate-800 transition dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
               >
                 Continue & Upload
               </button>

@@ -11,7 +11,7 @@ from app.models.auth import UserResponse, TokenPayload
 
 security_bearer = HTTPBearer(auto_error=False)
 
-# In-memory user store for demo/hackathon (email -> user dict)
+# In-memory user store for demo session evaluation (email -> user dict)
 DEMO_USERS: Dict[str, dict] = {
     "demo@legalease.com": {
         "id": "usr-demo-001",

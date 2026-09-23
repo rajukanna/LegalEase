@@ -25,7 +25,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
     'What penalties apply if I terminate early?',
     'Does the landlord have right of entry without notice?',
     'What happens to my security deposit?',
-    'What is the warranty on refrigerator? (Test Refusal)',
+    'What is the warranty period for appliances?',
   ];
 
   const handleSend = async (queryText?: string) => {
@@ -71,28 +71,28 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
   };
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white shadow-2xs dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-950">
+      <div className="flex items-center justify-between border-b border-slate-200/70 bg-white px-4 py-2.5 dark:border-slate-800 dark:bg-slate-950">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white">
-            <MessageSquare className="h-4 w-4" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+            <MessageSquare className="h-3.5 w-3.5" />
           </div>
           <div>
-            <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+            <h3 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white">
               Grounded Document Q&A
             </h3>
-            <p className="text-[10px] text-slate-500">Strictly grounded with citations</p>
+            <p className="text-[10px] text-slate-400">Strictly grounded with citations</p>
           </div>
         </div>
-        <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-700 border border-slate-200/60 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
           Anti-Hallucination
         </span>
       </div>
 
       {/* Suggested Prompt Pills */}
-      <div className="border-b border-slate-100 bg-slate-50/50 p-2.5 dark:border-slate-800 dark:bg-slate-950/40">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+      <div className="border-b border-slate-100 bg-slate-50/40 p-2.5 dark:border-slate-800/80 dark:bg-slate-950/40">
+        <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400 block mb-1.5">
           Suggested Questions
         </span>
         <div className="flex flex-wrap gap-1.5">
@@ -101,7 +101,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
               key={idx}
               onClick={() => handleSend(q)}
               disabled={isLoading}
-              className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 shadow-sm hover:border-blue-400 hover:text-blue-700 transition disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-500"
+              className="rounded-lg border border-slate-200/80 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 shadow-2xs hover:border-slate-300 hover:text-slate-900 transition disabled:opacity-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700"
             >
               {q}
             </button>
@@ -125,26 +125,26 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
               className={`flex flex-col ${isAssistant ? 'items-start' : 'items-end'}`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl p-3.5 sm:p-4 text-xs sm:text-sm leading-relaxed ${
+                className={`max-w-[85%] rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed ${
                   isAssistant
-                    ? 'border border-slate-100 bg-slate-50 text-slate-800 dark:border-slate-800 dark:bg-slate-800/80 dark:text-slate-100'
-                    : 'bg-blue-600 text-white shadow-sm'
+                    ? 'border border-slate-200/70 bg-slate-50/80 text-slate-800 dark:border-slate-800 dark:bg-slate-800/80 dark:text-slate-100'
+                    : 'bg-slate-900 text-white shadow-2xs dark:bg-white dark:text-slate-900'
                 }`}
               >
                 <p className="whitespace-pre-wrap">{msg.text}</p>
 
                 {/* Grounding Refusal Indicator */}
                 {isAssistant && msg.is_grounded === false && msg.id !== 'init-msg' && (
-                  <div className="mt-2.5 flex items-center gap-1.5 rounded-lg bg-amber-50 p-2 text-[11px] font-medium text-amber-900 border border-amber-200 dark:bg-amber-950/60 dark:border-amber-900 dark:text-amber-300">
-                    <ShieldAlert className="h-4 w-4 text-amber-600 shrink-0" />
+                  <div className="mt-2.5 flex items-center gap-1.5 rounded-lg bg-amber-50/80 p-2 text-[11px] font-medium text-amber-900 border border-amber-200/80 dark:bg-amber-950/60 dark:border-amber-900 dark:text-amber-300">
+                    <ShieldAlert className="h-3.5 w-3.5 text-amber-600 shrink-0" />
                     <span>Grounding Guard: Refused speculation beyond document context.</span>
                   </div>
                 )}
 
                 {/* Inline Citation Pills */}
                 {isAssistant && msg.citations && msg.citations.length > 0 && (
-                  <div className="mt-3 border-t border-slate-200/60 pt-2.5 dark:border-slate-700">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">
+                  <div className="mt-3 border-t border-slate-200/60 pt-2 dark:border-slate-700">
+                    <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400 block mb-1">
                       Source Citations (Click to View)
                     </span>
                     <div className="flex flex-wrap gap-1.5">
@@ -152,9 +152,9 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
                         <button
                           key={idx}
                           onClick={() => onCitationClick(c.section_reference)}
-                          className="inline-flex items-center gap-1 rounded-md bg-blue-100 px-2 py-0.5 text-[11px] font-semibold text-blue-800 hover:bg-blue-200 transition dark:bg-blue-950 dark:text-blue-300"
+                          className="inline-flex items-center gap-1 rounded-md bg-white border border-slate-200/80 px-2 py-0.5 text-[11px] font-medium text-slate-700 shadow-2xs hover:bg-slate-50 hover:border-slate-300 transition dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
                         >
-                          <Bookmark className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                          <Bookmark className="h-3 w-3 text-slate-500 dark:text-slate-400" />
                           <span>
                             {c.section_reference}, Page {c.page_number}
                           </span>
@@ -166,7 +166,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
 
                 {/* Persistent Disclaimer Badge on AI outputs */}
                 {isAssistant && (
-                  <div className="mt-2.5 text-[10px] text-slate-400 dark:text-slate-500 italic">
+                  <div className="mt-2 text-[10px] text-slate-400 dark:text-slate-500 italic">
                     General information only. Not legal advice.
                   </div>
                 )}
@@ -179,14 +179,14 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
 
         {isLoading && (
           <div className="flex items-center gap-2 text-xs text-slate-500 p-2" aria-live="polite">
-            <Sparkles className="h-4 w-4 animate-spin text-blue-600" />
+            <Sparkles className="h-3.5 w-3.5 animate-spin text-slate-700 dark:text-slate-300" />
             <span>Consulting document index & grounding citations...</span>
           </div>
         )}
       </div>
 
       {/* Input Box */}
-      <div className="border-t border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-900">
+      <div className="border-t border-slate-200/70 bg-white p-3 dark:border-slate-800 dark:bg-slate-900">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -201,15 +201,15 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ documentId, onCitationClic
             placeholder="Ask a grounded question about this agreement..."
             disabled={isLoading}
             aria-label="Ask a question about the document"
-            className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+            className="flex-1 rounded-xl border border-slate-200/80 bg-slate-50/50 px-3.5 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
           />
           <button
             type="submit"
             disabled={isLoading || !inputQuery.trim()}
             aria-label="Send query"
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow hover:bg-blue-700 transition disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white shadow-2xs hover:bg-slate-800 transition disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-slate-900 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
           >
-            <Send className="h-4 w-4" />
+            <Send className="h-3.5 w-3.5" />
           </button>
         </form>
       </div>

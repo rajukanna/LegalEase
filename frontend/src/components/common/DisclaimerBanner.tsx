@@ -18,10 +18,10 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({
       <footer
         role="contentinfo"
         aria-label="Legal Disclaimer"
-        className={`w-full border-t border-slate-200 bg-slate-100 py-3 px-4 text-center text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 ${className}`}
+        className={`w-full border-t border-slate-200/70 bg-white py-3 px-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400 ${className}`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-center gap-2">
-          <Scale className="h-4 w-4 text-slate-500 shrink-0" aria-hidden="true" />
+          <Scale className="h-3.5 w-3.5 text-slate-400 shrink-0" aria-hidden="true" />
           <p>
             <strong className="font-semibold text-slate-700 dark:text-slate-300">Notice:</strong>{' '}
             {disclaimerText}
@@ -35,16 +35,16 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({
     <aside
       role="note"
       aria-label="Legal Disclaimer Banner"
-      className={`w-full border-b border-blue-200 bg-blue-50 py-2.5 px-4 text-blue-900 dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-200 ${className}`}
+      className={`w-full border-b border-slate-200/70 bg-slate-50/90 backdrop-blur-xs py-2 px-4 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300 ${className}`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 text-xs sm:text-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" aria-hidden="true" />
+          <AlertCircle className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400 shrink-0" aria-hidden="true" />
           <p>
-            <span className="font-semibold">Educational Tool:</span> {disclaimerText}
+            <span className="font-medium text-slate-700 dark:text-slate-200">Educational Tool:</span> {disclaimerText}
           </p>
         </div>
-        <span className="hidden sm:inline-block rounded bg-blue-100 px-2 py-0.5 text-[11px] font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+        <span className="hidden sm:inline-block rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[10px] font-medium text-slate-600 shadow-2xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
           Non-Conclusory
         </span>
       </div>

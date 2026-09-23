@@ -36,19 +36,19 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   }, [activeClauseId, highlightQuery, document.chunks]);
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white shadow-2xs dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
       {/* Header bar */}
-      <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-950">
+      <div className="flex items-center justify-between border-b border-slate-200/70 bg-white px-4 py-2.5 dark:border-slate-800 dark:bg-slate-950">
         <div className="flex items-center gap-2 overflow-hidden">
-          <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
-          <h2 className="truncate text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200">
+          <FileText className="h-4 w-4 text-slate-700 dark:text-slate-300 shrink-0" />
+          <h2 className="truncate text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
             {document.metadata.filename}
           </h2>
-          <span className="rounded bg-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200/60 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
             {document.chunks.length} Clauses
           </span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-slate-500">
+        <div className="flex items-center gap-2 text-xs text-slate-400">
           <span>Page 1 of {document.metadata.total_pages}</span>
         </div>
       </div>
@@ -58,7 +58,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
         ref={containerRef}
         tabIndex={0}
         aria-label="Document text reader with navigable clauses"
-        className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 font-mono text-xs leading-relaxed text-slate-800 dark:text-slate-200 select-text focus-visible:outline-none"
+        className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 font-mono text-xs leading-relaxed text-slate-800 dark:text-slate-200 select-text focus-visible:outline-none"
       >
         {document.chunks.map((chunk) => {
           const isTargeted =
@@ -70,27 +70,27 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
               key={chunk.chunk_id}
               ref={(el) => (chunkRefs.current[chunk.chunk_id] = el)}
               onClick={() => onClauseClick && onClauseClick(chunk.clause_title)}
-              className={`rounded-xl border p-4 transition-all duration-300 cursor-pointer ${
+              className={`rounded-xl border p-4 transition-all duration-200 cursor-pointer ${
                 isTargeted
-                  ? 'border-amber-400 bg-amber-50/80 shadow-md ring-2 ring-amber-400/40 dark:border-amber-600 dark:bg-amber-950/40'
-                  : 'border-slate-100 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800/60 dark:bg-slate-950/50 dark:hover:border-slate-700'
+                  ? 'border-amber-400/90 bg-amber-50/50 shadow-2xs ring-1 ring-amber-400/30 dark:border-amber-600 dark:bg-amber-950/40'
+                  : 'border-slate-200/70 bg-white hover:border-slate-300 hover:bg-slate-50/40 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700'
               }`}
             >
               {/* Clause Header & Page Badge */}
-              <div className="mb-2 flex items-center justify-between border-b border-slate-200/60 pb-1.5 dark:border-slate-800">
+              <div className="mb-2 flex items-center justify-between border-b border-slate-100 pb-1.5 dark:border-slate-800">
                 <div className="flex items-center gap-1.5">
                   <Bookmark className={`h-3.5 w-3.5 ${isTargeted ? 'text-amber-600' : 'text-slate-400'}`} />
-                  <span className="font-sans font-bold text-xs text-slate-900 dark:text-white">
+                  <span className="font-sans font-semibold text-xs text-slate-900 dark:text-white">
                     {chunk.clause_title}
                   </span>
                 </div>
-                <span className="rounded bg-slate-200/80 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-500 border border-slate-200/60 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">
                   Page {chunk.page_number}
                 </span>
               </div>
 
               {/* Clause Text */}
-              <p className="whitespace-pre-wrap font-sans text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-normal">
+              <p className="whitespace-pre-wrap font-sans text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                 {chunk.text}
               </p>
             </div>
