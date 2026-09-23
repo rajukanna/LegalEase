@@ -75,3 +75,109 @@ describe('UploadZone Component', () => {
     expect(onSample).toHaveBeenCalledWith('doc-sample-lease');
   });
 });
+
+import { AuthModal } from '../components/auth/AuthModal';
+import { Navbar } from '../components/common/Navbar';
+
+describe('AuthModal Component', () => {
+  it('renders sign in modal when isOpen is true', () => {
+    const onClose = vi.fn();
+    const onSuccess = vi.fn();
+    render(<AuthModal isOpen={true} onClose={onClose} onSuccess={onSuccess} />);
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Sign in to LegalEase')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Password$/i)).toBeInTheDocument();
+  });
+
+  it('does not render when isOpen is false', () => {
+    const onClose = vi.fn();
+    const onSuccess = vi.fn();
+    render(<AuthModal isOpen={false} onClose={onClose} onSuccess={onSuccess} />);
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('switches between Sign In and Create Account tabs', () => {
+    const onClose = vi.fn();
+    const onSuccess = vi.fn();
+    render(<AuthModal isOpen={true} onClose={onClose} onSuccess={onSuccess} />);
+
+    const createAccountTab = screen.getByRole('button', { name: 'Create Account' });
+    fireEvent.click(createAccountTab);
+
+    expect(screen.getByText('Create your account')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
+  });
+
+  it('populates demo credentials when clicking Fill Demo', () => {
+    const onClose = vi.fn();
+    const onSuccess = vi.fn();
+    render(<AuthModal isOpen={true} onClose={onClose} onSuccess={onSuccess} />);
+
+    const fillDemoBtn = screen.getByRole('button', { name: 'Fill Demo' });
+    fireEvent.click(fillDemoBtn);
+
+    const emailInput = screen.getByLabelText(/Email Address/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^Password$/i) as HTMLInputElement;
+
+    expect(emailInput.value).toBe('demo@legalease.com');
+    expect(passwordInput.value).toBe('demo1234');
+  });
+
+  it('toggles password visibility between password and text', () => {
+    const onClose = vi.fn();
+    const onSuccess = vi.fn();
+    render(<AuthModal isOpen={true} onClose={onClose} onSuccess={onSuccess} />);
+
+    const passwordInput = screen.getByLabelText(/^Password$/i) as HTMLInputElement;
+    expect(passwordInput.type).toBe('password');
+
+    const toggleBtn = screen.getByLabelText('Show password');
+    fireEvent.click(toggleBtn);
+    expect(passwordInput.type).toBe('text');
+
+    const hideBtn = screen.getByLabelText('Hide password');
+    fireEvent.click(hideBtn);
+    expect(passwordInput.type).toBe('password');
+  });
+});
+
+describe('Navbar Auth Integration', () => {
+  const defaultProps = {
+    activeTab: 'analyze' as const,
+    setActiveTab: vi.fn(),
+    documents: [],
+    selectedDocId: 'doc-sample',
+    onSelectDocument: vi.fn(),
+    isDarkMode: false,
+    setIsDarkMode: vi.fn(),
+    onOpenTour: vi.fn(),
+    currentUser: null,
+    onOpenAuthModal: vi.fn(),
+    onLogout: vi.fn(),
+  };
+
+  it('renders Sign In / Sign Up button when user is not logged in', () => {
+    render(<Navbar {...defaultProps} />);
+    expect(screen.getByRole('button', { name: /Sign In \/ Sign Up/i })).toBeInTheDocument();
+  });
+
+  it('renders user avatar and name when user is logged in', () => {
+    const loggedInProps = {
+      ...defaultProps,
+      currentUser: {
+        id: 'usr-123',
+        email: 'alex@example.com',
+        full_name: 'Alex Morgan',
+        is_active: true,
+      },
+    };
+    render(<Navbar {...loggedInProps} />);
+    expect(screen.queryByRole('button', { name: /Sign In \/ Sign Up/i })).not.toBeInTheDocument();
+    expect(screen.getByText('AM')).toBeInTheDocument();
+    expect(screen.getByText('Alex Morgan')).toBeInTheDocument();
+  });
+});
+

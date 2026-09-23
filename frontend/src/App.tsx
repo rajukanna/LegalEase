@@ -9,7 +9,8 @@ import { ChatPanel } from './components/chat/ChatPanel';
 import { CompareView } from './components/compare/CompareView';
 import { LawyerBriefModal } from './components/export/LawyerBriefModal';
 import { GuidedTourModal } from './components/common/GuidedTourModal';
-import { DocumentMetadata, DocumentDetail, DocumentAnalysisResponse, RiskFlag } from './types/legal';
+import { AuthModal } from './components/auth/AuthModal';
+import { DocumentMetadata, DocumentDetail, DocumentAnalysisResponse, RiskFlag, User } from './types/legal';
 import { api } from './services/api';
 import { AlertTriangle, BookOpen, MessageSquare, Plus, RefreshCw } from 'lucide-react';
 
@@ -19,6 +20,11 @@ export const App: React.FC = () => {
   const [selectedDocId, setSelectedDocId] = useState<string>('doc-sample-lease');
   const [currentDocDetail, setCurrentDocDetail] = useState<DocumentDetail | null>(null);
   const [currentAnalysis, setCurrentAnalysis] = useState<DocumentAnalysisResponse | null>(null);
+
+  // Authentication State
+  const [currentUser, setCurrentUser] = useState<User | null>(api.getCurrentUser());
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalInitialTab, setAuthModalInitialTab] = useState<'signin' | 'signup'>('signin');
 
   // Right pane sub-tab in Document Workspace
   const [analysisSubTab, setAnalysisSubTab] = useState<'risks' | 'summary' | 'chat'>('risks');
@@ -39,22 +45,64 @@ export const App: React.FC = () => {
     }
   }, [isDarkMode]);
 
-  // Initial load: authenticate guest session and fetch documents
+  // Initial load: authenticate guest or existing user session and fetch documents
   useEffect(() => {
     const init = async () => {
-      await api.initGuestSession();
       try {
+        if (localStorage.getItem('legalease_token')) {
+          try {
+            const user = await api.getMe();
+            setCurrentUser(user);
+          } catch {
+            await api.initGuestSession();
+            setCurrentUser(api.getCurrentUser());
+          }
+        } else {
+          await api.initGuestSession();
+          setCurrentUser(api.getCurrentUser());
+        }
+
         const docs = await api.listDocuments();
         setDocuments(docs);
         if (docs.length > 0) {
           loadDocument(docs[0].id);
         }
       } catch (e) {
-        console.error('Failed to load initial documents', e);
+        console.error('Failed to initialize session or documents', e);
       }
     };
     init();
   }, []);
+
+  const handleAuthSuccess = async (user: User) => {
+    setCurrentUser(user);
+    setShowAuthModal(false);
+    try {
+      const docs = await api.listDocuments();
+      setDocuments(docs);
+      if (docs.length > 0) {
+        loadDocument(docs[0].id);
+      }
+    } catch (err) {
+      console.error('Failed to refresh documents after authentication', err);
+    }
+  };
+
+  const handleLogout = async () => {
+    api.logout();
+    setCurrentUser(null);
+    try {
+      await api.initGuestSession();
+      setCurrentUser(api.getCurrentUser());
+      const docs = await api.listDocuments();
+      setDocuments(docs);
+      if (docs.length > 0) {
+        loadDocument(docs[0].id);
+      }
+    } catch (err) {
+      console.error('Failed to reset guest session after logout', err);
+    }
+  };
 
   const loadDocument = async (docId: string) => {
     setSelectedDocId(docId);
@@ -100,6 +148,12 @@ export const App: React.FC = () => {
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
         onOpenTour={() => setShowTour(true)}
+        currentUser={currentUser}
+        onOpenAuthModal={() => {
+          setAuthModalInitialTab('signin');
+          setShowAuthModal(true);
+        }}
+        onLogout={handleLogout}
       />
 
       {/* Main Content Area */}
@@ -287,6 +341,14 @@ export const App: React.FC = () => {
           setActiveTab(tab);
           setShowTour(false);
         }}
+      />
+
+      {/* Auth Modal (Sign In / Sign Up) */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+        initialTab={authModalInitialTab}
       />
 
       {/* Persistent Disclaimer Footer */}
